@@ -1,5 +1,35 @@
 # SOME LINUX COMMANDS
 
+## streams
+
+- you have 3
+
+1. stdin > /dev/stdin > 0
+2. stdout > /dev/stdout > 1
+3. stderr > /dev/stderr > 2
+
+```sh
+cat 0<tmnt.txt 1>/dev/stdout # take tmnt from stdin and then move the output to stdout
+
+ls -z 2>/dev/null # redirect the error to nowhere
+
+tac tmnt.txt # reverse order for cat
+```
+
+### tee
+
+- it's like writing to stdout and the file at the same time
+- if you use it for files it will empty them
+- use more for commands
+- it's used for when you want to use sudo with `>`
+
+```sh
+echo "dpkg bla bla serious stuff" | sudo tee /root-file # overwrites by default
+echo "dpkg bla bla serious stuff" | sudo tee -a /root-file # appends
+```
+
+---
+
 ## Basics
 
 ```sh
@@ -56,6 +86,8 @@ date # shows date
 ## Piping
 
 ```sh
+< # instead of catting the file
+
 > # writes to file. doesn't append. automatically creates
 >> # appends to file
 | # pipes the output to another command
@@ -478,7 +510,9 @@ curl -L # follows redirection
 
 ---
 
-## fmt
+## Text Formatting misc cmds
+
+### fmt
 
 ```sh
 fmt -w 20 file.txt # outputs file to be 20 char long, to fit small terminals
@@ -486,3 +520,213 @@ fmt -u file.txt # adds a space after each word, 2 spaces after each sentence
 fmt -t # indents first line of paragraph
 fmt -s # splits longer lines
 ```
+
+### nl
+
+```sh
+nl file.txt # basically cat -n
+```
+
+### awk
+
+- scripting lang to manipulate text
+- takes from stdin, write to stdout
+
+- uses **spaces** as delimiters by default
+
+```sh
+awk '{print}' tmnt.txt # prints all fields like cat
+
+ls -l | awk '{print $2}' # second field from piped ls
+
+awk '{print $1,$3}' tmnt.txt # print 1st & 3rd fields
+leonardo leader
+raphael hothead
+michelangelo party-animal
+donatello geek
+```
+
+- `$0` >> all fields
+- `$NF` >> last field
+
+```sh
+# search for users, their home folders and their shells
+awk -F ':' '{print $1, $6, $NF}' /etc/passwd # changed delimiter to :
+awk -F ':' '{print $1" || "$6" || "$NF }' /etc/passwd # added some spacing
+awk 'BEGIN{FS=":"; OFS="-"} {print $1, $6, $NF }' /etc/passwd # specify separator, then change it
+```
+
+- to use awk with a pattern, use `'/<add you regex pattern here>/'` :
+
+```sh
+# list all the unique shells on the system
+awk -F "/" '/^\// {print $NF}' /etc/shells | uniq | sort # we looked for lines starting with a /, we escaped it cuz the patter itself uses /
+```
+
+- awk can have simple maths
+
+```sh
+df | awk '/\/dev\/sda/ {print $1 "\t" $2+$3*2 }'
+# in df, get lines containing /dev/sda (/ is escaped)
+# then add tab char as spacing
+# then get the sum of $2 + $3*2
+```
+
+- you can filter by length
+
+```sh
+awk 'length($0) > 9' /etc/shells
+# split by space, look for lines longer than 9 chars, print them all
+```
+
+- if statements exist
+
+```sh
+ps -ef | awk '{if($NF == "/usr/bin/zsh") print $0}'
+# output of ps, split by space
+# if last field is bin zsh then print all fields
+```
+
+- you have for loops too
+
+```sh
+awk 'BEGIN { for(i=1; i<=10; i++) print "The square root of", i, "is", i*i;}'
+# try it
+```
+
+- more regex action
+- `~` is like sql, to match regex stuff
+
+```sh
+awk '$1 ~ /^[l,d]/ {print $0}' tmnt.txt
+```
+
+### sed
+
+- changes text in files, quickly
+- writes to stdout, so write to file
+
+1. `s` for substitute, followed by delimiter
+2. **Always Use / As Delimiter Cuz Convention Till You Want To Replace the character itself**, then use another delimiter
+3. word to replace, what to replace it with
+4. then end with the delimiter
+5. and `g` for global matching
+
+```sh
+sed 's/Pineapple/Feta/' tmnt.txt # s for substitute, replace Pineapple with Feta on the first match only
+sed 's/Pineapple/Feta/g' tmnt.txt # s for substitute, replace Pineapple with Feta on all matches
+sed 's/Pineapple/d' tmnt.txt > tmnt-edit.txt # wrote to new file, only first match DELETED
+
+sed -i 's:/:|:g' tmnt.txt # writes to file in place, changed delimiter cuz i wanna change /
+
+sed -e 's:usr:u:g' -e 's:bin:b:g' < /etc/shells
+```
+
+### cut - tr
+
+#### cut - similar to str[start:end]
+
+```sh
+echo "bruh man yo" | cut -c 1-6 # only chars 1 to 6
+echo "bruh man yo" | cut -c 11- # cuts last chars after the 11th char
+```
+
+#### tr - poor man's sed
+
+```sh
+echo "bruh man yo" | tr 'u' 'U' # replace u with U
+echo "bruh man yo" | tr 'aeiou' 'AEIOU' # replace vowels with their CAPS
+echo "bruh man yo" | tr -d 'aeiou' # delete all vowels
+
+echo "bruuuuh" | tr -s 'u' # squeeze all u's into 1 u
+```
+
+---
+
+## strace - ltrace
+
+### strace - monitor program sys calls
+
+- calls to the OS
+
+```sh
+man syscalls # all systemcalls
+strace ssh # trace ssh sys calls
+strace -p 134 # trace PID 134 sys calls
+```
+
+### ltrace - monitor program lib calls
+
+```sh
+ltrace ssh # trace ssh sys calls
+ltrace -p 134 # trace PID 134 sys calls
+```
+
+---
+
+## uname
+
+```sh
+uname
+Linux
+uname -a # all info
+"Linux ub-vbox 5.15.0-67-generic #74-Ubuntu SMP Wed Feb 22 14:14:39 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux"
+```
+
+---
+
+## Monitoring Misc cmds
+
+### lsof - ls open files
+
+- asks kernel to see which files are open, and what processes are using a file
+
+```sh
+lsof # pid, cmd, path of files open
+lsof /path/to/open/file # what program is running the file
+
+lsof -p 138 # all files open by PID 138
+lsof -p 138 | grep .so # what shared libs is the app using
+lsof -p 138 | grep log # what log files
+
+lsof -u mina # what's open by mina
+
+sudo lsof -i :80 # what's listening on port 80
+sudo lsof -i tcp
+```
+
+### nmon
+
+- has lots of modular stat commands
+
+### iostat
+
+- for disk usage
+
+```sh
+iostat 1 111 # refreshes every sec
+```
+
+### dstat
+
+- for cpu usage
+
+### vmstat
+
+- for virtual memory
+  `-d` for disk stats
+  `-D` for disk stats table
+  `-p sda1` for stats on a partition
+
+### traceroute
+
+- traces all calls when reaching an ip
+
+```sh
+traceroute google.com
+```
+
+### sar - sys activity recorder
+
+- to enable monitoring, edit `/etc/default/sysstat`
+- automatically logs every 10 mins using a cron job
