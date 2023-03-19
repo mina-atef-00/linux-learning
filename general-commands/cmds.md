@@ -34,19 +34,21 @@ ln -r # makes a hard link given a relative path, it has to be made _RELATIVE TO 
 - symlinks `ln -s` are vice versa
 
 ```sh
-readlink -f # gets the location of the holy original source of link
+readlink -f # gets the location of the original source of link
 ```
 
 ---
 
-## Head-Tail
+## head - tail
 
 ```sh
 head # prints first 10 lines in a file
 head -l 5 # first 5
 tail -n 5 # last 5 lines
-_IMPORTANT_ `tail -F # keeps monitoring the file for changes _perfect for logs_
-`date`
+
+tail -F # keeps monitoring the file for changes _perfect for logs_
+
+date # shows date
 ```
 
 ---
@@ -158,8 +160,8 @@ find . -name '*.js' # all files ending with js recursive, **exact matches**
 find . -name '*E*' -or -iname 'F*' # returns all files containing E or starting with (F or f (case insensitive))
 find . -name '*.md' -not -path '/some/excluded/path' # returns all files containing E or F or f
 find . -name '*.md' -type f -size +100k -size -1M # any md file with size <1 mega >100 kilobyte
-find . -name '*.md' -type f -mtime -1 # any md file modified in the last dat
-find . -name '*.md' -type f -mtime -3 -delete # any md file modified 3 days ago, then delete them
+find . -name '*.md' -type f -mtime -2 # any md file modified in 2 days ago
+find . -name '*.md' -type f -mmin -3 -delete # any md file modified 3 mins ago, then delete them
 find . -type f -exec cat {} \; # executes cat on each output file, `{}` is a place-holder, `\;` stops executing
 find . -type d -exec ls {} \; # ls all dirs
 ```
@@ -227,7 +229,7 @@ statuses (mostly 1 letter, 2 is more info):
 - `S` a process that is sleeping for less than about 20 seconds
 - `T` a stopped process
 - `U` a process in uninterruptible wait
-- `Z` a dead process (a zombie) +` is a foreground pid
+- `Z` a dead process (a zombie) + is a foreground pid
 - `s` session leader
 
 ### top - interactive
@@ -270,7 +272,7 @@ bg job_num # sends job to bg
 
 ## Zipping
 
-### gzip
+### gzip - gunzip
 
 ```sh
 gzip a.md # zips a file, **deletes original**
@@ -285,14 +287,8 @@ gzip -1 -c a.md > a1.gz # compression lvl 1
 gzip -r ./dirs # recursively dirs
 gzip -kv a.md # shows compression progress
 gzip -d a.gz # **decompress**, remove zip
-```
 
-### gunzip
-
-- basically `gzip -d # uncompresses, removes zip
-
-```sh
-gunzip -c a.gz > a.md`
+gunzip -c a.gz > a.md # basically gzip -d
 ```
 
 ### tar - makes an archive
@@ -387,12 +383,14 @@ chgrp mygroup file.txt # change ownership to mygroup
 ### chmod
 
 ```sh
-chmod 623 file` # = `chmod u+rw g+w o+wx file`
+chmod 623 file # = chmod u+rw g+w o+wx file
 ```
 
 ---
 
 ## systemd
+
+### systemctl
 
 ```sh
 systemctl # shows all bg processes
@@ -409,6 +407,8 @@ systemctl reload # doesn't go down, much perfered
 systemctl restart # goes down then up, some units need it after changing unit file to apply changes
 ```
 
+### unit files
+
 - All unit files reside on `/usr/lib/systemd/system`
 
 ```sh
@@ -424,6 +424,16 @@ sudo nvim /usr/lib/systemd/system/apache2.service # edit unit file
     - `multi-user.target` >> it's a bg cmd that runs on terminal
     - `graphical.target` >> it's a gui app
 
+### journalctl
+
+```sh
+journalctl -u nginx.service # nginx unit logs
+journalctl -f -u nginx.service # follows the logs like tail -f
+journalctl --since "2020-12-28 10:24:00" --until "2020-12-30 12:24:00" -u nginx.service
+```
+
+- you can use `/` to search inside `journalctl` log
+
 ---
 
 ## Internet
@@ -436,7 +446,7 @@ wget -O my-file.zip https://link.com/file.zip # change name ONLY
 wget -P /my/special/dir https://link.com/file.zip # change location ONLY
 ```
 
-- wget automatically pauses the download
+- wget automatically pauses the download if inturrepted
 
   ```sh
   wget -c /same/link/ # resume download
