@@ -33,6 +33,9 @@ echo "dpkg bla bla serious stuff" | sudo tee -a /root-file # appends
 ## Basics
 
 ```sh
+last # login access log
+lastb # checks bad login attempts
+
 whoami # print user
 man # ual
 `clear`
@@ -243,65 +246,6 @@ history # history with nums, usually 500
 
 ---
 
-## Processes
-
-### ps
-
-```sh
-ps # shows pids by the current user
-ps ax # shows all pids, a for all users, x for all terms, cmds are cut
-ps axww # show full cmds
-ps axww | grep zsh # show full cmds
-```
-
-statuses (mostly 1 letter, 2 is more info):
-
-- `I` a process that is idle (sleeping for longer than about 20 seconds)
-- `R` a runnable process
-- `S` a process that is sleeping for less than about 20 seconds
-- `T` a stopped process
-- `U` a process in uninterruptible wait
-- `Z` a dead process (a zombie) + is a foreground pid
-- `s` session leader
-
-### top - interactive
-
-```sh
-top -o mem # sort by mem usage
-```
-
-### kill
-
-```sh
-kill 1424 # kill pid 1424
-```
-
-```sh
-kill -HUP <PID> # hang up, tell process to close -1
-kill -INT <PID> # interrupt, just like ctrl c, terminates -2
-kill -KILL <PID> # tell the kernel to stop, terminate the proc -9
-kill -TERM <PID> # tell the process to terminate itself -15
-kill -CONT <PID> # tell the proc to continue -18
-kill -STOP <PID> # tells the kernel to stop but not terminate the proc -15
-```
-
-### killall - kill but for all instances of the procces not just a pid
-
-```sh
-killall -HUP top
-```
-
-### jobs - fg - bg
-
-```sh
-command & # runs command in the background, gets stored in jobs
-jobs # lists jobs
-fg job_num # sends job to fg
-bg job_num # sends job to bg
-```
-
----
-
 ## Zipping
 
 ### gzip - gunzip
@@ -468,49 +412,7 @@ journalctl --since "2020-12-28 10:24:00" --until "2020-12-30 12:24:00" -u nginx.
 
 ---
 
-## Internet
-
-### wget
-
-```sh
-wget https://link.com/file.zip # download zip
-wget -O my-file.zip https://link.com/file.zip # change name ONLY
-wget -P /my/special/dir https://link.com/file.zip # change location ONLY
-```
-
-- wget automatically pauses the download if inturrepted
-
-  ```sh
-  wget -c /same/link/ # resume download
-  ```
-
-- it can install multiple files from a download file
-
-```sh
-wget -i files-to-download.txt
-```
-
-### curl
-
-- more used for scripts
-- outputs to stdout
-
-```sh
-curl link # outputs link
-curl -v https://google.com # verbose mode, perfect for analyzing traffic
-curl -i # shows resp headers alongside output
-curl -I # shows only resp headers
-curl -O myzip.zip www.some/link.zip # downloads file
-curl --limit-rate 500K # sims dw speed
-curl --data "title=hi&body=yo" # adds data, POST by default
-curl --data -X PUT "title=hi&body=yo" # adds data, uses PUT
-curl -u username:passwd # adds auth
-curl -L # follows redirection
-```
-
----
-
-## Text Formatting misc cmds
+## Text Manipulation commands
 
 ### fmt
 
@@ -622,16 +524,16 @@ sed -i 's:/:|:g' tmnt.txt # writes to file in place, changed delimiter cuz i wan
 sed -e 's:usr:u:g' -e 's:bin:b:g' < /etc/shells
 ```
 
-### cut - tr
-
-#### cut - similar to str[start:end]
+### cut - similar to `str[start:end]`
 
 ```sh
 echo "bruh man yo" | cut -c 1-6 # only chars 1 to 6
 echo "bruh man yo" | cut -c 11- # cuts last chars after the 11th char
 ```
 
-#### tr - poor man's sed
+### tr - poor man's sed
+
+- **IMPORTANT** it looks for chars like regex, not find and replace like sed
 
 ```sh
 echo "bruh man yo" | tr 'u' 'U' # replace u with U
@@ -671,6 +573,65 @@ uname
 Linux
 uname -a # all info
 "Linux ub-vbox 5.15.0-67-generic #74-Ubuntu SMP Wed Feb 22 14:14:39 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux"
+```
+
+---
+
+## Processes
+
+### ps
+
+```sh
+ps # shows pids by the current user
+ps ax # shows all pids, a for all users, x for all terms, cmds are cut
+ps axww # show full cmds
+ps axww | grep zsh # show full cmds
+```
+
+statuses (mostly 1 letter, 2 is more info):
+
+- `I` a process that is idle (sleeping for longer than about 20 seconds)
+- `R` a runnable process
+- `S` a process that is sleeping for less than about 20 seconds
+- `T` a stopped process
+- `U` a process in uninterruptible wait
+- `Z` a dead process (a zombie) + is a foreground pid
+- `s` session leader
+
+### top - interactive
+
+```sh
+top -o mem # sort by mem usage
+```
+
+### kill
+
+```sh
+kill 1424 # kill pid 1424
+```
+
+```sh
+kill -HUP <PID> # hang up, tell process to close -1
+kill -INT <PID> # interrupt, just like ctrl c, terminates -2
+kill -KILL <PID> # tell the kernel to stop, terminate the proc -9
+kill -TERM <PID> # tell the process to terminate itself -15
+kill -CONT <PID> # tell the proc to continue -18
+kill -STOP <PID> # tells the kernel to stop but not terminate the proc -15
+```
+
+### killall - kill but for all instances of the procces not just a pid
+
+```sh
+killall -HUP top
+```
+
+### jobs - fg - bg
+
+```sh
+command & # runs command in the background, gets stored in jobs
+jobs # lists jobs
+fg job_num # sends job to fg
+bg job_num # sends job to bg
 ```
 
 ---
@@ -718,6 +679,86 @@ iostat 1 111 # refreshes every sec
   `-D` for disk stats table
   `-p sda1` for stats on a partition
 
+### sar - sys activity recorder
+
+- to enable monitoring, edit `/etc/default/sysstat`
+- automatically logs every 10 mins using a cron job
+
+---
+
+## Internet
+
+### wget
+
+```sh
+wget https://link.com/file.zip # download zip
+wget -O my-file.zip https://link.com/file.zip # change name ONLY
+wget -P /my/special/dir https://link.com/file.zip # change location ONLY
+```
+
+- wget automatically pauses the download if inturrepted
+
+  ```sh
+  wget -c /same/link/ # resume download
+  ```
+
+- it can install multiple files from a download file
+
+```sh
+wget -i files-to-download.txt
+```
+
+### curl
+
+- more used for scripts
+- outputs to stdout
+
+```sh
+curl link # outputs link
+curl -v https://google.com # verbose mode, perfect for analyzing traffic
+curl -i # shows resp headers alongside output
+curl -I # shows only resp headers
+curl -O myzip.zip www.some/link.zip # downloads file
+curl --limit-rate 500K # sims dw speed
+curl --data "title=hi&body=yo" # adds data, POST by default
+curl --data -X PUT "title=hi&body=yo" # adds data, uses PUT
+curl -u username:passwd # adds auth
+curl -L # follows redirection
+```
+
+---
+
+## Networking Commands
+
+### know your public ip
+
+```sh
+curl icanhazip.com
+```
+
+### ufw
+
+```sh
+ufw status numbered
+ufw default allow outgoing
+ufw default deny incoming
+ufw allow ssh # 22 by default. by default allow allows access from anywhere
+ufw allow https/tcp # 80 by default
+ufw enable
+ufw delete 3 # delete rule 3 (from numbered)
+
+ufw allow from your_public_ip to any port 22 proto tcp # only allows ssh (ssh uses tcp) from a public ip
+```
+
+### iptables
+
+- built in linux
+- no need to install ufw
+
+```sh
+
+```
+
 ### traceroute
 
 - traces all calls when reaching an ip
@@ -726,7 +767,72 @@ iostat 1 111 # refreshes every sec
 traceroute google.com
 ```
 
-### sar - sys activity recorder
+### ping
 
-- to enable monitoring, edit `/etc/default/sysstat`
-- automatically logs every 10 mins using a cron job
+- sends ICMP echo requests to IPs, you can block them in ufw
+- you can use it to check downtime when you reboot a server. when it's off you get packet loss and get no replies
+
+```sh
+ping 8.8.8.8 # checks if target is online, endless
+ping -c 4 'learnlinux.tv' # pings 4 times, it tells time spent, you have to get ~0% packet loss
+```
+
+### mtr
+
+- combination of traceroute & ping
+
+```sh
+mtr google.com # keeps pinging, traces the requests, checks packet loss and times responses
+mtr -i 2 google.com # pings for 2 sec
+mtr -c 5 google.com # pings for 5 times
+mtr -n google.com # doesn't resolve host names to ips
+mtr [--json/--xml/--csv/--raw] -n google.com # doesn't resolve host names to ips
+mtr -F some-log-file.log --csv -n google.com # logs in this file
+```
+
+### dig
+
+- checks the DNS `A records` for ips for host names
+
+```sh
+dig google.com # querying the isp default dns server
+dig @8.8.8.8 google.com # querying a specific dns server
+```
+
+```
+;; ANSWER SECTION:
+google.com.             55      IN      A       216.58.198.78
+```
+
+### nmap
+
+- checks if host is up, **what ports are closed or open**, latency
+
+```sh
+nmap 127.0.0.1 another-host.com # scan 2 ips
+nmap -v 127.0.0.1/24 # verbose, includes whole subnet
+nmap -sV 127.0.0.1 # includes service info
+nmap -A 127.0.0.1 # more info
+nmap 127.0.0.1-4 --exclude 127.0.0.2-3 # will scan ips 127.0.0.1 & 127.0.0.4
+nmap -sP 127.0.0.1/24 shows condensed info of the hosts online on this subnet
+nmap -T5 2345.2435.324/24 # less accurace, much faster, T0 is much slower but much more accurate, use it to check for intrusion systems, T3 is default
+```
+
+### tcpdump
+
+- sniffs traffic through all the osi layers
+
+```sh
+tcpdump -i enp0s3 -v host google.com # dumps traffic, verbose, for interface,
+tcpdump -i enp0s3 -v src 192.168.1.96 and dst google.com and net 5984.5485.54/24 # source, destination, subnet
+```
+
+### netstat
+
+- for tcp/udp network monitoring
+
+```sh
+netstat -ie # just like ip a, ifconfig
+netstat -r # shows the routing table
+netstat -c # continuous
+```
