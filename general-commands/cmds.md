@@ -37,6 +37,7 @@ last # login access log
 lastb # checks bad login attempts
 
 whoami # print user
+env # print env vars
 man # ual
 `clear`
 [] # optional
