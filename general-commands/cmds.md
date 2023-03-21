@@ -9,9 +9,10 @@
 3. stderr > /dev/stderr > 2
 
 ```sh
-cat 0<tmnt.txt 1>/dev/stdout # take tmnt from stdin and then move the output to stdout
+cat 0<tmnt.txt 1>/dev/stdout 2>&1 # take tmnt from stdin and then move the output to stdout
 
 ls -z 2>/dev/null # redirect the error to nowhere
+ls -z &>/dev/null # redirect stdout, stderr to nowhere
 
 tac tmnt.txt # reverse order for cat
 ```
@@ -91,10 +92,13 @@ date # shows date
 
 ```sh
 < # instead of catting the file
-
+&> # pipes both stdout and stderr
 > # writes to file. doesn't append. automatically creates
 >> # appends to file
 | # pipes the output to another command
+
+command -v htop &> /dev/null # checks if htop exists and sends it's stdout & stderr to /dev/null
+command >stdout.txt 2>stderr.txt
 ```
 
 ---
@@ -153,7 +157,10 @@ sort general-commands/cmds.md | uniq -c | sort -nr | less # sorts lines, counts 
 
 ### $env vars
 
+- \*\*always wrap them with `""` when invoking
+
 ```sh
+$? # show exit code of last cmd
 $PATH # shows directories added to path
 $SHELL # shows active shell location
 $USER # same as whoami
@@ -206,6 +213,7 @@ find . -type d -exec ls {} \; # ls all dirs
 
 ```sh
 grep 'sometexttobefound' file.txt # you know, **case-sensitive**
+grep -q # quiet mode, useful for bash scripts
 grep -n -i 'sometexttobefound' file.txt # you know, with line numbers, make search case-insensitive
 grep -n -C 2 'sometexttobefound' file.txt # C for context, add 2 lines before and after
 grep -v 'some text' file.md # inverts the results, print lines not containing shit
@@ -289,6 +297,16 @@ alias ll='ls -al' # you know
 **IMPORTANT**
 alias lsthis="ls $PWD" # `""`: variable is resolved @ declaration time, will ls the directory where you declared the alias
 alias lscurrent='ls $PWD' # `''`: variable is resolved @ invocation time, ls current dir normally
+```
+
+## command
+
+- runs commands bypassing any aliases
+
+```sh
+alias ll="ls -lahG"
+command ll # cmd not found
+command -v ls # location of ls
 ```
 
 ---
