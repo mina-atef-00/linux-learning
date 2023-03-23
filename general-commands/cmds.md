@@ -59,6 +59,14 @@ cp -s # makes symbolic links
 
 ---
 
+## Difference between sudo su - and sudo -i and sudo -s
+
+- `sudo -s`: gives you an elevated shell. but doesn't simulate a login: your env vars won't be root's. your workdir won't be `/root`
+- `sudo -i`: **THE BEST LOGIN SIM**. gives you the root workdir and env vars.
+- `sudo su -`: similar to -i but it mixes and matches the env vars which is not clean.
+
+---
+
 ## Linking
 
 ```sh
