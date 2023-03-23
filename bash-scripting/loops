@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -e
+
+# Iterate over a list of files and print their names
+for file in *.txt; do
+    echo $file
+done
+
+# Iterate over a list of numbers from 1 to 5
+for i in {1..10}; do
+    if [ $i -eq 5 ]; then #? will only print 1 through 4
+        break
+    fi
+    echo $i
+done
+
+# Iterate over a string and print each character
+for char in "Hello"; do
+    echo $char
+done
+
+# a while loop that prints the numbers from 1 to 5:
+count=1
+while [ $count -le 5 ]; do
+    echo $count
+    count=$((count + 1))
+done
+
+# read input from a user until they enter a specific word, like "quit":
+
+input=""
+while [ "$input" != "quit" ]; do
+    echo "Enter a word (or 'quit' to exit): "
+    read input
+    echo "You entered: $input"
+    continue
+done

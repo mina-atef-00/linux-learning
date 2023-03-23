@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e #? exit script if any command fails
+
+some_var=$(ls)   #? sub shells
+echo "$some_var" #? always surround them with ""
+
+echo $(expr 1 + 4)  #? mind the spacing
+echo $(expr 1 \* 4) #? needs escaping
+
+echo $((2 * 4))

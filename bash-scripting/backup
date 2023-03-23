@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e
+
+usage_msg="Usage: backup.sh <source_dir> <target_dir>"
+help_msg=$(
+    cat <<EOF
+This Bash script performs a backup operation using the rsync command. It also logs the output of the rsync command to a file named after the current date in the format "backup_<current_date>.log"
+----------
+$usage_msg
+EOF
+)
+
+help_args=(-h --help)
+
+is_help_arg() {
+    [[ "${help_args[*]}" =~ $1 ]]
+}
+
+#? check if there's only 2 args
+if [ "$#" -ne 2 ]; then
+    if is_help_arg $1; then
+        echo "$help_msg"
+        exit 0
+    else
+        echo "You didn't provide 2 arguments"
+        echo "$usage_msg"
+        exit 1
+    fi
+fi
+
+#? check if rsync is installed
+if ! command -v rsync >/dev/null 2>&1; then
+    echo "rsync is required"
+    echo "run: 'sudo apt install rsync'"
+    exit 2 #? different exit codes
+fi
+
+#? capture current date, store it in format yyyy-mm-dd
+current_date=$(date +%Y-%m-%d)
+
+rsync_options="-avb --backup-dir $2/$current_date --delete --dry-run" #! always dry run rsync first to simulate what it would do
+
+rsync $rsync_options $1 $2/current >>backup_$current_date.log

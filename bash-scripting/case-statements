@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -e
+
+simple_case_statement() {
+    while true; do
+        echo "enter var: "
+        read var
+
+        case $var in #? all choices break the case statement
+        50) echo "man you like fifty" ;;
+        50) echo "stupid" ;; #? won't get executed, auto break
+        69) echo "nice num" ;;
+        "foo")
+            echo "bar"
+            echo "that's crazy"
+            ;;
+        *) #? anything else
+            echo "nah not satisfied"
+            break #? breaks the while loop
+            ;;
+        esac
+    done
+}
+
+std_bash_prompt() {
+    echo "Which Linux distribution is your favorite?"
+    PS3="Please enter your choice: "                   #? special var for the select cmd, showing the prompt string
+    options=("Ubuntu" "Fedora" "Debian" "Mint" "Arch") #? a special array for the select cmd for options
+    select opt in "${options[@]}"; do                  #? the cmd showing the prompt, "${options[@]}" expands the options array into a list of its elements
+        case $opt in
+        "Ubuntu")
+            echo "You chose Ubuntu"
+            break
+            ;;
+        "Fedora")
+            echo "You chose Fedora"
+            break
+            ;;
+        "Debian")
+            echo "You chose Debian"
+            break
+            ;;
+        "Mint")
+            echo "You chose Mint"
+            break
+            ;;
+        "Arch")
+            echo "You chose Arch"
+            break
+            ;;
+        *) echo "Invalid option. Please select a number from 1 to 5." ;;
+        esac
+    done
+}
+
+# simple_case_statement
+# std_bash_prompt

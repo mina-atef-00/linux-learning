@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+if [ $# -ne 1 ]; then
+    echo "please enter only 1 argument"
+    exit 1
+fi
+
+ls_output_lines_count=$(ls -lh $1 | wc -l)
+objects_count=$(($ls_output_lines_count - 1))
+
+echo "you have $objects_count objects in $1"

@@ -1,0 +1,64 @@
+#!/bin/bash
+
+#? Define variables
+log_file="/var/log/update-script/updater.log"
+error_log_file="/var/log/update-script/updater-errors.log"
+
+update_err_msg="An error occurred while updating your system. please check $error_log_file"
+
+#? Update system using pacman or apt-get
+run_universal_distro_upgrade() {
+    local pkg_manager="$(check_pkg_manager)"
+
+    if [ "$pkg_manager" == "pacman" ]; then
+        update_with_pacman
+    elif [ "$pkg_manager" == "apt" ]; then
+        update_with_apt
+    else
+        echo "This script only runs on apt and pacman distros."
+        exit 1
+    fi
+
+    check_update_err
+}
+
+#? Update system using pacman package manager
+update_with_pacman() {
+    sudo pacman -Syyyu --noconfirm 1>>"$log_file" 2>>"$error_log_file"
+}
+
+#? Update system using apt-get package manager
+update_with_apt() {
+    sudo apt-get update && sudo apt-get dist-upgrade -y 1>>"$log_file" 2>>"$error_log_file"
+}
+
+check_update_err() {
+    if [[ $? != 0 ]]; then
+        echo "$update_err_msg"
+    fi
+
+}
+
+#? Check which package manager is installed
+check_pkg_manager() {
+    if [ -d "/etc/pacman.d" ]; then
+        echo "pacman"
+    elif [ -d "/etc/apt" ]; then
+        echo "apt"
+    else
+        echo "other"
+    fi
+}
+
+#! won't be used
+#? give it a distro name param and it will check if it's detected in the release file
+function check_distro() {
+    if grep -q '^ID="'$1'"' /etc/os-release; then
+        echo "Distribution '$1' detected."
+    else
+        echo "Distribution '$1' not detected."
+    fi
+}
+
+#? Call the main function
+run_universal_distro_upgrade

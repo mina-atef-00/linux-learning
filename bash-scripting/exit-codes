@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#? exit codes helps you understand if there was an error in executing the last command
+#? 0 >> no error. anything else >> error
+
+#? a non existent dir
+ls /notexistent 2>/dev/null
+echo "Exit Code: $?" #? >> 2
+
+# example 2
+cmdsLocation=./general-commands/cmds.md
+grep --quiet "grep" "$cmdsLocation"
+if [ $? -eq 0 ]; then
+    echo "Pattern found"
+else
+    echo "Pattern not found"
+fi

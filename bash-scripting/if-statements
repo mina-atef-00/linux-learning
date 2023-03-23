@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+#? if then elif else fi
+
+echo "Please input var: "
+read input_var
+
+if [ "$input_var" -eq 5 ]; then #? test command has -eq -gt -ge -lt -o -a -d -f, [ ] is an alias (watch the spacing)
+    echo "input_var is equal to 5"
+elif [ ! "$input_var" -gt 5 ]; then
+    echo "input_var is less than 5"
+else
+    echo "input_var is greater than 5"
+fi
+
+#? (only bash zsh ksh) shells support [[]] but it has more features
+#? like || and && instead of -o -a
+#? and > and <= instead of -gt -le
+#? it also has =~ for regex matching
+
+echo "input var1"
+read var1
+echo "input var2"
+read var2
+
+if [[ "$var1" == "foo" && "$var2" != "bar" ]]; then #? you could [ "$var1" == "foo" ] && [ "$var2" != "bar" ]
+    echo "Both var1 is foo and var2 is not bar"
+fi
+
+if command -v git >/dev/null; then
+    echo "Git is installed"
+else
+    echo "Git is not installed"
+fi

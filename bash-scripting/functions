@@ -1,0 +1,16 @@
+#!/bin/bash
+
+function add_nums() {
+    local sum=$(($1 + $2)) #? $1,$2 1st,2nd param. vars are global by default, use local
+    echo $sum
+}
+
+function is_palindrome() {
+    local str=$1
+    local reverse_str=$(echo $str | rev) #? rev reverses the output
+    if [ "$str" == "$reverse_str" ]; then
+        echo "Palindrome"
+    else
+        echo "Not a palindrome"
+    fi
+}
