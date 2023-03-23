@@ -713,6 +713,44 @@ iostat 1 111 # refreshes every sec
 
 ---
 
+## Scheduling
+
+- always run commands as their full paths when writing scripts
+- better security
+- shells and distros change
+
+### at
+
+- has to be in US time format (24:00 08142020)
+- executes commands with `/bin/sh`
+
+```sh
+at 21:04 08152023 -f path/to/scripy # to sched scripts
+atq # to list the job queue
+atrm job_num_1 job_num_2
+```
+
+### cron jobs
+
+```sh
+crontab #? shows crontab
+crontab -e #? edits crontab, if you ran as user then it will be only yours
+sudo crontab -u user -e #? cronjob for another user
+```
+
+- how to write cron jobs:
+  ```sh
+  30 1 * * 5 /usr/local/bin/script #? run this script every friday at 1:30
+  m  h day_of_mth month day_of_week
+  ```
+  - specify what time it will run
+  - the more specific the time, the less the cronjob will run
+  - what months or days it will run
+  - what days of the week it will run
+  - sunday is both 0 & 7
+
+---
+
 ## Internet
 
 ### wget
