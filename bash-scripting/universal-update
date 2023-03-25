@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #? Define variables
 log_file="/var/log/update-script/updater.log"

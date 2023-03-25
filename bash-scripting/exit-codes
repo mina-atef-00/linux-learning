@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #? exit codes helps you understand if there was an error in executing the last command
 #? 0 >> no error. anything else >> error

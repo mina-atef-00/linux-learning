@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #set +e
 #? default behavior, continues script execution if a cmd fails
