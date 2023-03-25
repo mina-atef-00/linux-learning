@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 
-set -e
-
 logfile=job_results.log
 /usr/bin/echo "the script ran at: $(/usr/bin/date)" >>$logfile #? fully qualified cmds is better for security

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 simple_case_statement() {
     while true; do
         read -p "enter var: " var

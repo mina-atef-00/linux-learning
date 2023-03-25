@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 #? in if statements, true equals 0 and false equals 1
 #! that's why you shouldn't use set -e
 

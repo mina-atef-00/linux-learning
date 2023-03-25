@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 empty_arr=()
 
 my_arr=(1 2 3 "banana" true)

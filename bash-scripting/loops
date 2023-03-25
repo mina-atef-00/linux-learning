@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 # Iterate over a list of files and print their names
 for file in *.txt; do
     echo $file
