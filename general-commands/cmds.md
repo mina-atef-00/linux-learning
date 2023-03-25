@@ -98,8 +98,23 @@ date # shows date
 
 ## Piping
 
+1. input pipes
+
 ```sh
 < # instead of catting the file
+
+<< # here doc, pass input data to a cmd till a specified ending text is seen, and then perform analysis on all previous input data. use it in bash scripts
+cat << EOF # take the input and stop after EOF
+some text bla bla
+multi line stuff
+EOF # multi line strings. BE CAREFUL WHEN COUNTING CUZ IT READS EOF
+
+cat <<< "some string" # here string, instead of entering docs like heredoc, it is similar to echo "string" | cmd
+```
+
+2. output pipes
+
+```sh
 &> # pipes both stdout and stderr
 > # writes to file. doesn't append. automatically creates
 >> # appends to file
@@ -440,6 +455,20 @@ journalctl --since "2020-12-28 10:24:00" --until "2020-12-30 12:24:00" -u nginx.
 ---
 
 ## Text Manipulation commands
+
+### read
+
+```sh
+read # reads from std, stores in $REPLY by default
+echo $REPLY
+
+read -s password # secret, doesn't show input you type
+echo "$password"
+
+read -p "Enter some input: " $input_var
+
+read -n 5 -p "Only enter 5 chars in this prompt: " five_char_var
+```
 
 ### fmt
 
