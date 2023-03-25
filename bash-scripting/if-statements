@@ -2,11 +2,12 @@
 
 set -e
 
+#? in if statements, true equals 0 and false equals 1
+#! that's why you shouldn't use set -e
+
+read -p "Please input var: " input_var #! doesn't work on zsh
+
 #? if then elif else fi
-
-echo "Please input var: "
-read input_var
-
 if [ "$input_var" -eq 5 ]; then #? test command has -eq -gt -ge -lt -o -a -d -f, [ ] is an alias (watch the spacing)
     echo "input_var is equal to 5"
 elif [ ! "$input_var" -gt 5 ]; then
@@ -20,10 +21,8 @@ fi
 #? and > and <= instead of -gt -le
 #? it also has =~ for regex matching
 
-echo "input var1"
-read var1
-echo "input var2"
-read var2
+read -p "input var1" var1
+read -p "input var2" var2
 
 if [[ "$var1" == "foo" && "$var2" != "bar" ]]; then #? you could [ "$var1" == "foo" ] && [ "$var2" != "bar" ]
     echo "Both var1 is foo and var2 is not bar"

@@ -4,8 +4,7 @@ set -e
 
 simple_case_statement() {
     while true; do
-        echo "enter var: "
-        read var
+        read -p "enter var: " var
 
         case $var in #? all choices break the case statement
         50) echo "man you like fifty" ;;
