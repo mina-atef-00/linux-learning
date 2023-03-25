@@ -2,7 +2,7 @@
 
 set -e
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 1 ]; then #? $# is for the number of arguments for the script
     echo "please enter only 1 argument"
     exit 1
 fi
