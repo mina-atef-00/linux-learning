@@ -16,9 +16,18 @@ for i in {1..10}; do
 done
 
 # Iterate over a string and print each character
-for char in "Hello"; do
+#! very slow
+for char in $( #! be careful as it counts the EOF as well
+    grep -o "." <<<"Hello" #? same as `echo "Hello" | grep -o "."`
+); do
     echo $char
 done
+
+# Iterate over a string and print each character
+#! much faster
+while IFS = read -r -n1 char; do
+    echo "$char"
+done <<<"Hello"
 
 # a while loop that prints the numbers from 1 to 5:
 count=1
@@ -31,8 +40,7 @@ done
 
 input=""
 while [ "$input" != "quit" ]; do
-    echo "Enter a word (or 'quit' to exit): "
-    read input
+    read -p "Enter a word (or 'quit' to exit): " input
     echo "You entered: $input"
     continue
 done
