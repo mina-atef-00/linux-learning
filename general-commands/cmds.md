@@ -40,20 +40,20 @@ lastb # checks bad login attempts
 whoami # print user
 env # print env vars
 man # ual
-`clear`
+clear
 [] # optional
 pwd # print working directory
-`ls --all --human-readable --size -S`
+ls --all --human-readable --size -S
 cd # is posix
-`mkdir -p /all/new/stuff/not/there`
-`touch woman apple.txt misterman.md bruh.py some-other-file.js`
-`rm --verbose`
+mkdir -p /all/new/stuff/not/there
+touch woman apple.txt misterman.md bruh.py some-other-file.js
+rm --verbose
 rmdir # for empty dirs == rm -d
-`rm --recursive --force --interactive`
+rm --recursive --force --interactive
 xdg-open # is just like macs open
 mv -t /destination/dir # moves file from destination to current directory
 mv --update # move only when src file is newer than dest file
-cp -r --perserve`
+cp -r --preserve`
 cp -s # makes symbolic links
 ```
 
@@ -86,7 +86,7 @@ readlink -f # gets the location of the original source of link
 
 ```sh
 head # prints first 10 lines in a file
-head -l 5 # first 5
+head -n 5 # first 5
 tail -n 5 # last 5 lines
 
 tail -F # keeps monitoring the file for changes _perfect for logs_
@@ -147,7 +147,7 @@ cat log-file.log | wc -l > line-count.txt # counts log lines, writes it to anoth
 
 ```sh
 sort # just compares ascii stuff
-sort --ignore-leading-blanks --dictionary-order --month-sort --numeric-sort --reverse`
+sort --ignore-leading-blanks --dictionary-order --month-sort --numeric-sort --reverse
 sort -nr # reverse num sort
 sort -u # ignores duplicates
 sort -u # ignores duplicates
@@ -252,7 +252,7 @@ grep -v 'some text' file.md # inverts the results, print lines not containing sh
 du -g . # size of dir in giga
 du -m * # size of each dir individually, in mega
 du -ha # human readable size, lists each file in dirs too
-du -h | sort -nr | head -l 5 # sort by size, get top 5
+du -h | sort -nr | head -n 5 # sort by size, get top 5
 ```
 
 ### df - for disk usgae
@@ -616,8 +616,8 @@ strace -p 134 # trace PID 134 sys calls
 ### ltrace - monitor program lib calls
 
 ```sh
-ltrace ssh # trace ssh sys calls
-ltrace -p 134 # trace PID 134 sys calls
+ltrace ssh # trace ssh lib calls
+ltrace -p 134 # trace PID 134 lib calls
 ```
 
 ---

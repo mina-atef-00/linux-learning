@@ -14,7 +14,7 @@
  libx32 -> usr/libx32
  lost+found
  media # when you mount external media it resides here, it's automatic mount
- mnt # temporary mount point for drives, it's manual
+ mnt # temporary mount point for drives, it's mostly manual
  opt # some 3rd party apps are here
  proc # has the running processes and system info
  root # the root user's home
