@@ -6,7 +6,7 @@ some_var=$(ls)   #? sub shells
 echo "$some_var" #? always surround them with ""
 
 #! never use expr, just use $(())
-echo $(expr 1 + 4)  #? mind the spacing
-echo $(expr 1 \* 4) #? needs escaping
+echo "$(expr 1 + 4)" #? mind the spacing #! USELESS ECHO
+expr 1 \* 4          #? needs escaping
 
 echo $((2 * 4))

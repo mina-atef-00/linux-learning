@@ -8,7 +8,8 @@ update_err_msg="An error occurred while updating your system. please check $erro
 
 #? Update system using pacman or apt-get
 run_universal_distro_upgrade() {
-    local pkg_manager="$(check_pkg_manager)"
+    local pkg_manager
+    pkg_manager="$(check_pkg_manager)"
 
     if [ "$pkg_manager" == "pacman" ]; then
         update_with_pacman
